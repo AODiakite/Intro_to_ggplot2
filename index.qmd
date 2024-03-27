@@ -1,0 +1,754 @@
+---
+title: "Introduction à ggplot2"
+subtitle: "Guide pratique pour créer des visualisations attrayantes en R"
+author:
+  - name: Abdoul Oudouss Diakité
+    affiliations:
+      - id: INRS
+        name: Institut national de la recherche scientifique
+        city: Montréal
+        state: QC
+  - name: Mylène Gagnon
+    affiliations:
+      - ref: UQAC
+        name: Université du Québec à Chicoutimi
+        city: Chicoutimi
+        state: QC
+format:
+  revealjs: 
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    css: styles.css
+    footer: Le comité étudiant du CISD
+resources:
+  - demo.pdf
+---
+
+## Qu'est-ce que `ggplot2` ?
+
+
+- `ggplot2` est une librairie de visualisation de données en R.
+- Développée par Hadley Wickham, elle est basée sur la grammaire des graphiques.
+- `ggplot2` permet de créer des visualisations esthétiques et hautement personnalisables.
+
+::: {.fragment .fade-in}
+```{ .r code-line-numbers="1-3|4-5|6-7"}
+# Installer le package ggplot2
+# Option 1 : Installer le package tidyverse
+install.packages("tidyverse")
+# Option 2 : Installer le package ggplot2
+install.packages("ggplot2")
+# Charger le package ggplot2
+library(ggplot2)
+```
+:::
+```{r}
+#| echo: false
+library(tidyverse)
+```
+
+
+## Composants d'un graphique ggplot2
+
+::: incremental
+1. **Données**: Les données à visualiser.
+2. **Mapping**: Lier les variables des données aux esthétiques graphiques.
+3. **Geoms**: Les éléments géométriques (points, lignes, barres) représentant les données.
+4. **Facetting**: Diviser les données en sous-groupes pour créer plusieurs graphiques.
+5. **Themes**: Personnaliser l'apparence générale du graphique.
+:::
+
+## Créer un graphique ggplot2
+
+Pour créer un graphique avec ggplot2, nous avons besoin de trois choses :
+
+- Les données à visualiser;
+
+- Esthétiques (aes) : mappings entre variables et propriétés visuelles (e.g., x, y, couleur, forme, etc.)
+
+- Geom : le type de graphique à créer (e.g., points, lignes, barres, etc.)
+
+
+## Créer un graphique ggplot2 {.smaller .scrollable}
+
+::: panel-tabset
+
+### Graphique
+
+```{r}
+#| echo: true
+#| fig-width: 10
+#| fig-height: 3.8
+library(ggplot2)
+# Créer un graphique de dispersion simple
+ggplot(data = mtcars, aes(x = mpg, y = hp)) +
+  geom_point()
+```
+
+
+### Données
+
+```{r}
+knitr::kable(mtcars,booktabs = TRUE) |>
+  kableExtra::kable_styling(bootstrap_options = "striped", full_width = F)
+```
+
+:::
+
+::: footer
+En savoir plus : [ggplot](https://ggplot2.tidyverse.org/index.html)
+:::
+
+## Ajout de couches graphiques (geoms) {.smaller .scrollable}
+Les couches graphiques (geoms) déterminent le type de graphique que nous voulons créer (e.g., points, lignes, barres).
+
+::: panel-tabset
+
+### Histogramme
+::: columns
+::: {.column width="45%"}
+```{ .r}
+# Créer un histogramme
+ggplot(data = mtcars, aes(x = mpg)) +
+  geom_histogram()
+```
+:::
+
+::: {.column width="55%"}
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 7
+# Créer un histogramme
+ggplot(data = mtcars, aes(x = mpg)) +
+  geom_histogram()
+```
+:::
+:::
+
+
+
+### Barres
+
+::: columns
+::: {.column width="45%"}
+```{ .r}
+# Créer un diagramme à barres
+ggplot(data = mtcars, 
+       aes(x = factor(cyl))) +
+  geom_bar()
+```
+:::
+
+::: {.column width="55%"}
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 7
+# Créer un diagramme à barres
+ggplot(data = mtcars, 
+       aes(x = factor(cyl))) +
+  geom_bar()
+```
+:::
+:::
+
+
+### Boxplot
+
+::: columns
+::: {.column width="45%"}
+```{ .r}
+# Créer une boîte à moustaches
+ggplot(data = mtcars, 
+       aes(x = factor(cyl), y = mpg)) +
+  geom_boxplot()
+```
+:::
+
+::: {.column width="55%"}
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 7
+# Créer une boîte à moustaches
+ggplot(data = mtcars, 
+       aes(x = factor(cyl), y = mpg)) +
+  geom_boxplot()
+```
+:::
+:::
+
+
+
+### Violon
+
+::: columns
+::: {.column width="45%"}
+```{ .r}
+# Créer un diagramme en violon
+ggplot(data = mtcars, 
+       aes(x = factor(cyl), y = mpg)) +
+  geom_violin()
+```
+:::
+
+::: {.column width="55%"}
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 7
+# Créer un diagramme en violon
+ggplot(data = mtcars, 
+       aes(x = factor(cyl), y = mpg)) +
+  geom_violin()
+```
+:::
+:::
+
+
+### Tendance
+
+::: columns
+::: {.column width="45%"}
+```{ .r}
+# Créer une courbe de tendance
+ggplot(data = mtcars, 
+       aes(x = mpg, y = hp)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+:::
+
+::: {.column width="55%"}
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 7
+# Créer une courbe de tendance
+ggplot(data = mtcars, 
+       aes(x = mpg, y = hp)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+:::
+:::
+
+
+
+:::
+
+::: footer
+En savoir plus : [ggplot](https://ggplot2.tidyverse.org/index.html)
+:::
+
+## Personnalisation 
+
+::: {.justify}
+Dans ggplot2, la personnalisation des graphiques est facilitée par un large éventail d'options et de fonctions qui permettent de contrôler presque tous les aspects de l'apparence des graphiques. En explorant et en expérimentant ces options, les utilisateurs peuvent créer des visualisations de données uniques et adaptées à leurs besoins spécifiques, tout en respectant les meilleures pratiques en matière de conception graphique et de communication des données.
+:::
+
+## Données {.smaller .scrollable}
+
+Dans la suite, nous allons utiliser le jeu de données `exemple_df` pour illustrer les différentes options de personnalisation des graphiques ggplot2.
+
+```{ .r}
+exemple_df <- data.frame(
+  Levels = c(
+    "Lowest quantile", "Second quantile", "Middle quantile",
+    "Fourth quantile", "Top quantile", "All", "",
+    "Top 10 percent", "Top 5 percent", "Top 1 percent",
+    "Top 0.5 percent", "Top 0.1 percent"),
+  Value = c(-9.8, -19.1, -11.6, -8.4, -9.1, -9.4, 0, -9.5, -10.4, -13.4, -13.9, -13.7)) |>
+  mutate(
+    Highlight = c(rep("0", 5), "1", rep("2", 6)),
+    Levels = factor(Levels, levels = Levels)
+  )
+```
+
+```{r}
+#| echo: false
+library(kableExtra)
+library(dplyr)
+exemple_df <- data.frame(
+  Levels = c(
+    "Lowest quantile", "Second quantile", "Middle quantile",
+    "Fourth quantile", "Top quantile", "All", "",
+    "Top 10 percent", "Top 5 percent", "Top 1 percent",
+    "Top 0.5 percent", "Top 0.1 percent"),
+  Value = c(-9.8, -19.1, -11.6, -8.4, -9.1, -9.4, 0, -9.5, -10.4, -13.4, -13.9, -13.7)) |>
+  mutate(
+    Highlight = c(rep("0", 5), "1", rep("2", 6)),
+    # Convert 'Levels' to factor and specify levels to maintain order
+    Levels = factor(Levels, levels = Levels)
+  )
+
+kbl(exemple_df) |>
+  kable_paper("striped", font_size = 14, full_width = F) |>
+  kable_styling(c("striped", "bordered")) 
+
+```
+
+
+## Thèmes {.smaller}
+
+::: columns
+::: {.justify}
+Les thèmes ggplot2 permettent de modifier l'apparence générale du graphique. En plus de `theme_minimal()`, il existe d'autres thèmes intégrés tels que `theme_classic()`, `theme_dark()`, `theme_bw()`, `theme_gray()`, et `theme_light()`. Vous pouvez également créer vos propres thèmes en utilisant la fonction `theme()` et en modifiant les éléments individuels, tels que les lignes, les arrière-plans, les polices et les couleurs.
+:::
+
+::: {.column width="45%"}
+```{ .r}
+exemple_df |>
+  ggplot(aes(x = Levels, 
+             y = Value, fill = Highlight)) +
+  geom_col(position = "dodge", width = 0.8)
+```
+:::
+
+::: {.column width="55%"}
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 7
+exemple_df |>
+  ggplot(aes(x = Levels, 
+             y = Value, fill = Highlight)) +
+  geom_col(position = "dodge", width = 0.8)
+```
+:::
+:::
+
+## Échelles {.smaller}
+
+::: {.justify}
+Les échelles contrôlent la manière dont les données sont mappées aux propriétés visuelles. Vous pouvez personnaliser les échelles des axes x et y en utilisant `scale_x_continuous()` et `scale_y_continuous()` pour les variables continues, ou `scale_x_discrete()` et `scale_y_discrete()` pour les variables discrètes. Vous pouvez également modifier les étiquettes, les limites et les ruptures des axes, ainsi que les couleurs et les dégradés.
+:::
+
+## Échelles {.smaller .smaller}
+
+::: columns
+::: {.column width="45%"}
+```{ .r code-line-numbers="1|10-15|16-21|22-29"}
+library(stringr)
+ggplot(
+  data = exemple_df,
+  aes(x = Levels, y = Value, fill = Highlight)
+) +
+  geom_col(
+    position = "dodge",
+    width = 0.8
+  ) +
+  # Echelles pour les axes x et y
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(-20, 0),
+    n.breaks = 6
+  ) +
+  scale_x_discrete(
+    position = "top",
+    labels = function(x) {
+      str_wrap(x, width = 10)
+    }
+  ) +
+  # Couleurs de remplissage
+  scale_fill_manual(
+    values = c(
+      "0" = "lightblue",
+      "1" = "gray",
+      "2" = "#005488"
+    )
+  )
+```
+:::
+::: {.column width="55%"}
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 7
+#| fig-align: center
+library(stringr)
+ggplot(
+  data = exemple_df,
+  aes(x = Levels, y = Value, fill = Highlight)
+) +
+  geom_col(
+    position = "dodge",
+    width = 0.8
+  ) +
+  # Echelles pour les axes x et y
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(-20, 0),
+    n.breaks = 6
+  ) +
+  scale_x_discrete(
+    position = "top",
+    labels = function(x) {
+      str_wrap(x, width = 10)
+    }
+  ) +
+  # Couleurs de remplissage
+  scale_fill_manual(
+    values = c(
+      "0" = "lightblue",
+      "1" = "gray",
+      "2" = "#005488"
+    )
+  )
+```
+:::
+:::
+
+## Annotations {.smaller}
+
+::: columns
+::: {.column width="45%"}
+```{ .r code-line-numbers="30-36"}
+library(stringr)
+ggplot(
+  data = exemple_df,
+  aes(x = Levels, y = Value, fill = Highlight)
+) +
+  geom_col(
+    position = "dodge",
+    width = 0.8
+  ) +
+  # Echelles pour les axes x et y
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(-20, 0),
+    n.breaks = 6
+  ) +
+  scale_x_discrete(
+    position = "top",
+    labels = function(x) {
+      str_wrap(x, width = 10)
+    }
+  ) +
+  # Couleurs de remplissage
+  scale_fill_manual(
+    values = c(
+      "0" = "lightblue",
+      "1" = "gray",
+      "2" = "#005488"
+    )
+  ) +
+  labs(
+    title = "Diagramme à barres",
+    subtitle = "Revenu moyen par quantile, 2018",
+    caption = "Fake Source: World Inequality Database",
+    x = "quantile",
+    y = "Revenu moyen"
+  )
+```
+:::
+::: {.column width="55%"}
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 7
+#| fig-align: center
+library(stringr)
+ggplot(
+  data = exemple_df,
+  aes(x = Levels, y = Value, fill = Highlight)
+) +
+  geom_col(
+    position = "dodge",
+    width = 0.8
+  ) +
+  # Echelles pour les axes x et y
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(-20, 0),
+    n.breaks = 6
+  ) +
+  scale_x_discrete(
+    position = "top",
+    labels = function(x) {
+      str_wrap(x, width = 10)
+    }
+  ) +
+  # Couleurs de remplissage
+  scale_fill_manual(
+    values = c(
+      "0" = "lightblue",
+      "1" = "gray",
+      "2" = "#005488"
+    )
+  ) +
+  labs(
+    title = "Diagramme à barres",
+    subtitle = "Revenu moyen par quantile, 2018",
+    caption = "Fake Source: World Inequality Database",
+    x = "quantile",
+    y = "Revenu moyen"
+  ) 
+```
+:::
+:::
+
+## Plus en détail {.smaller}
+
+::: columns
+::: {.column width="45%"}
+```{ .r code-line-numbers="37-39|40-41|42-43|44-49|50-54|55-59|60-61|62-67|68-73"}
+library(stringr)
+ggplot(
+  data = exemple_df,
+  aes(x = Levels, y = Value, fill = Highlight)
+) +
+  geom_col(
+    position = "dodge",
+    width = 0.8
+  ) +
+  # Echelles pour les axes x et y
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(-20, 0),
+    n.breaks = 6
+  ) +
+  scale_x_discrete(
+    position = "top",
+    labels = function(x) {
+      str_wrap(x, width = 10)
+    }
+  ) +
+  # Couleurs de remplissage
+  scale_fill_manual(
+    values = c(
+      "0" = "lightblue",
+      "1" = "gray",
+      "2" = "#005488"
+    )
+  ) +
+  labs(
+    title = "Diagramme à barres",
+    subtitle = "Revenu moyen par quantile, 2018",
+    caption = "Fake Source: World Inequality Database",
+    x = "quantile",
+    y = "Revenu moyen"
+  ) +
+  theme(
+    # Supprimer la légende
+    legend.position = "none",
+    # Supprimer les titres des axes
+    axis.title = element_blank(),
+    # Supprimer les ticks des axes
+    axis.ticks = element_blank(),
+    # Modifier la police des étiquettes
+    axis.text = element_text(
+      size = 10,
+      face = "bold",
+      color = "black"
+    ),
+    # Modifier le titre
+    plot.title = element_text(
+      size = 16,
+      face = "bold"
+    ),
+    # Modifier le sous-titre
+    plot.subtitle = element_text(
+      size = 12,
+      face = "italic"
+    ),
+    # Supprimer le fond
+    panel.background = element_blank(),
+    # Ajouter une bordure
+    panel.border = element_rect(
+      color = "black",
+      fill = NA,
+      size = 1
+    ),
+    # Ajouter la grille horizontale
+    panel.grid.major.y = element_line(
+      color = "gray",
+      size = 0.5
+    )
+  )
+```
+:::
+::: {.column width="55%"}
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 7
+#| fig-align: center
+library(stringr)
+ggplot(
+  data = exemple_df,
+  aes(x = Levels, y = Value, fill = Highlight)
+) +
+  geom_col(
+    position = "dodge",
+    width = 0.8
+  ) +
+  # Echelles pour les axes x et y
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(-20, 0),
+    n.breaks = 6
+  ) +
+  scale_x_discrete(
+    position = "top",
+    labels = function(x) {
+      str_wrap(x, width = 10)
+    }
+  ) +
+  # Couleurs de remplissage
+  scale_fill_manual(
+    values = c(
+      "0" = "lightblue",
+      "1" = "gray",
+      "2" = "#005488"
+    )
+  ) +
+  labs(
+    title = "Diagramme à barres",
+    subtitle = "Revenu moyen par quantile, 2018",
+    caption = "Fake Source: World Inequality Database",
+    x = "quantile",
+    y = "Revenu moyen"
+  ) +
+  theme(
+    # Supprimer la légende
+    legend.position = "none",
+    # Supprimer les titres des axes
+    axis.title = element_blank(),
+    # Supprimer les ticks des axes
+    axis.ticks = element_blank(),
+    # Modifier la police des étiquettes
+    axis.text = element_text(
+      size = 10,
+      face = "bold",
+      color = "black"
+    ),
+    # Modifier le titre
+    plot.title = element_text(
+      size = 16,
+      face = "bold"
+    ),
+    # Modifier le sous-titre
+    plot.subtitle = element_text(
+      size = 12,
+      face = "italic"
+    ),
+    # Supprimer le fond
+    panel.background = element_blank(),
+    # Ajouter une bordure
+    panel.border = element_rect(
+      color = "black",
+      fill = NA,
+      size = 1
+    ),
+    # Ajouter la grille horizontale
+    panel.grid.major.y = element_line(
+      color = "gray",
+      size = 0.5
+    )
+  )
+```
+:::
+:::
+
+
+## Resultat final {.smaller}
+
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 7
+#| fig-align: center
+library(stringr)
+ggplot(
+  data = exemple_df,
+  aes(x = Levels, y = Value, fill = Highlight)
+) +
+  geom_col(
+    position = "dodge",
+    width = 0.8
+  ) +
+  # Echelles pour les axes x et y
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(-20, 0),
+    n.breaks = 6
+  ) +
+  scale_x_discrete(
+    position = "top",
+    labels = function(x) {
+      str_wrap(x, width = 10)
+    }
+  ) +
+  # Couleurs de remplissage
+  scale_fill_manual(
+    values = c(
+      "0" = "lightblue",
+      "1" = "gray",
+      "2" = "#005488"
+    )
+  ) +
+  labs(
+    title = "Diagramme à barres",
+    subtitle = "Revenu moyen par quantile, 2018",
+    caption = "Fake Source: World Inequality Database",
+    x = "quantile",
+    y = "Revenu moyen"
+  ) +
+  theme(
+    # Supprimer la légende
+    legend.position = "none",
+    # Supprimer les titres des axes
+    axis.title = element_blank(),
+    # Supprimer les ticks des axes
+    axis.ticks = element_blank(),
+    # Modifier la police des étiquettes
+    axis.text = element_text(
+      size = 10,
+      face = "bold",
+      color = "black"
+    ),
+    # Modifier le titre
+    plot.title = element_text(
+      size = 16,
+      face = "bold"
+    ),
+    # Modifier le sous-titre
+    plot.subtitle = element_text(
+      size = 12,
+      face = "italic"
+    ),
+    # Supprimer le fond
+    panel.background = element_blank(),
+    # Ajouter une bordure
+    panel.border = element_rect(
+      color = "black",
+      fill = NA,
+      size = 1
+    ),
+    # Ajouter la grille horizontale
+    panel.grid.major.y = element_line(
+      color = "gray",
+      size = 0.5
+    )
+  )
+```
+
+## Conclusion {.smaller}
+
+Dans ce cours d'introduction à `ggplot2`, nous avons appris les bases de la création de graphiques à l'aide de ce puissant package R. Nous avons exploré divers types de graphiques (geoms), ainsi que des options de personnalisation pour adapter l'apparence des graphiques à nos besoins spécifiques. La maîtrise de `ggplot2` permet de créer des visualisations de données informatives et attrayantes, facilitant ainsi l'analyse et la communication des résultats.
+
+## Ressources {.smaller}
+
+Pour approfondir vos connaissances en ggplot2, consultez les ressources en ligne suivantes :
+
+1. **Livre "ggplot2: Elegant Graphics for Data Analysis"** : <https://ggplot2-book.org/>
+2. **Documentation officielle de ggplot2** : <https://ggplot2.tidyverse.org/reference/>
+3. **Tutoriels RStudio** : <https://rstudio.cloud/learn/primers/12>
+4. **DataCamp** : <https://www.datacamp.com/courses/introduction-to-data-visualization-with-ggplot2>
+5. **r/ggplot2 sur Reddit** : <https://www.reddit.com/r/ggplot2/>
+
+
