@@ -8,12 +8,6 @@ author:
         name: Institut national de la recherche scientifique
         city: Montréal
         state: QC
-  - name: Mylène Gagnon
-    affiliations:
-      - ref: UQAC
-        name: Université du Québec à Chicoutimi
-        city: Chicoutimi
-        state: QC
 format:
   revealjs: 
     slide-number: true
